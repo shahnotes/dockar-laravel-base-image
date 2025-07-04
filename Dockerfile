@@ -12,15 +12,16 @@ WORKDIR /var/www
 
 # Install system packages, PHP extensions, and Supervisor
 RUN apk add --no-cache \
-    unzip \
-    libpq \
-    libpq-dev \
-    libcurl \
-    curl-dev \
-    nginx \
-    oniguruma-dev \
     bash \
+    unzip \
+    curl \
+    nginx \
     supervisor \
+    oniguruma \
+    && apk add --no-cache --virtual .build-deps \
+    libpq-dev \
+    curl-dev \
+    oniguruma-dev \
     && docker-php-ext-install \
     pdo \
     pdo_mysql \
@@ -29,7 +30,7 @@ RUN apk add --no-cache \
     curl \
     opcache \
     mbstring \
-    && apk del libpq-dev curl-dev oniguruma-dev \
+    && apk del .build-deps \
     && rm -rf /var/cache/apk/*
 
 # Copy Composer from official image
